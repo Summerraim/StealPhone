@@ -1,0 +1,30 @@
+# ---- UE5 生成目录（不入库）----
+Binaries/
+Build/
+DerivedDataCache/
+Intermediate/
+Saved/
+.vs/
+.idea/
+.vscode/
+Plugins/*/Binaries/
+Plugins/*/Intermediate/
+
+# ---- 编译/系统产物 ----
+*.sln
+*.suo
+*.opensdf
+*.sdf
+*.VC.db
+*.VC.opendb
+*.log
+*.tmp
+*.bak
+*.autosave
+Thumbs.db
+Desktop.ini
+.DS_Store
+
+# ---- 美术大文件源（体积大，走网盘/Perforce）----
+*.psd
+*.blend1
