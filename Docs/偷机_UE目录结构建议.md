@@ -68,7 +68,11 @@ E:\Unreal\StealPhone\
 │     │  ├─ L_SP_AudioTest            # 音频/材质测试
 │     │  └─ L_SP_Main                 # 正式流程
 │     ├─ UI\
-│     │  ├─ WBP_SP_InteractIcon       # 仅有图标，无文字
+│     │  ├─ WBP_SP_MainMenu           # 2D 动画首页
+│     │  ├─ WBP_SP_InteractIcon       # 交互图标
+│     │  ├─ WBP_SP_Subtitle           # 必要配音字幕
+│     │  ├─ WBP_SP_Failure            # 失败 2D 图与重试
+│     │  ├─ WBP_SP_Victory            # 胜利 2D 图与结算
 │     │  ├─ WBP_SP_Pause
 │     │  └─ WBP_SP_Fade
 │     ├─ Audio\
@@ -81,6 +85,7 @@ E:\Unreal\StealPhone\
 │     │  ├─ Meshes\
 │     │  ├─ Materials\
 │     │  ├─ Textures\
+│     │  ├─ UI                       # 2D 图、按钮、切图
 │     │  └─ Animations\
 │     └─ Dev\
 │        └─ Debug\
@@ -136,13 +141,15 @@ Fabric, Paper, Wood, Plastic, Ceramic, Metal, WoodFloor, Tile
 | 字段 | 说明 |
 |---|---|
 | `EquipmentID` | 装备编号 |
-| `Slot` | Hand / FootInner / FootOuter |
+| `Slot` | Hand / Foot |
 | `Material` | 对应的材质类型 |
 | `Mesh` | 可选，P0 可以先不做 |
 | `Icon` | 无文字交互图标 |
 | `Priority` | P0/P1 |
 
-P0 只需要棉袜；棉手套、软布鞋可以等主流程跑通后再加。
+最终版 P0 足部只保留袜子（赤脚/棉袜），不制作鞋子；手部 P0 为赤手。棉手套、皮手套和羊毛袜作为 P1。
+
+`BP_SP_Equipment` 必须分别保存 `HandMaterial` 和 `FootMaterial`：手部拿取、放回、推门读取 `HandMaterial`；脚步和脚部碰撞读取 `FootMaterial`。`BP_SP_RunManager` 不保存手/脚状态，只接收本次实际接触传入的 `PlayerMaterial`。
 
 ### `DA_SP_Tuning`
 
@@ -166,8 +173,9 @@ P0 只需要棉袜；棉手套、软布鞋可以等主流程跑通后再加。
 PlayerCharacter
   ├─ 移动、视角、手电
   ├─ BPC_Interaction：从相机发射射线，确认实际接触
-  ├─ BPC_Equipment：当前手部/足部材质
-  └─ BPC_Footstep：落脚时读取地面材质并发事件
+  ├─ BPC_Equipment：分别保存 HandMaterial / FootMaterial
+  ├─ BPC_Footstep：落脚时读取 FootMaterial + 地面材质并发事件
+  └─ 手部拿取/推门：读取 HandMaterial 后发事件
 
 Interactable Actor
   ├─ 实现 BPI_SP_Interactable
